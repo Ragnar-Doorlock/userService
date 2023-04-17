@@ -15,7 +15,7 @@ class JsonOperations {
         return JSON.parse(jsonData);
     }
 
-    async getUsers() {
+    async getData() {
         return this.returnParsed();
     }
 

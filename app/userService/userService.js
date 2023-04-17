@@ -11,7 +11,7 @@ class UserService {
             role,
         };
 
-        const users = await this.jsonOperations.getUsers();
+        const users = await this.jsonOperations.getData();
         users.push(dbInput);
 
         await this.jsonOperations.writeData(users);
@@ -22,7 +22,7 @@ class UserService {
     }
 
     async update({ id, name, role }) {
-        const users = await this.jsonOperations.getUsers(); 
+        const users = await this.jsonOperations.getData(); 
 
         const valueExistsInDB = this._hasInDB(id, users);
         if (!valueExistsInDB) {
@@ -50,7 +50,7 @@ class UserService {
     }
 
     async delete(id) {
-        const users = await this.jsonOperations.getUsers();
+        const users = await this.jsonOperations.getData();
 
         const valueExistsInDB = this._hasInDB(id, users);
         if (!valueExistsInDB) {
@@ -73,7 +73,7 @@ class UserService {
             return this.cacheProvider.get(`${id}_${name}_${role}`);
         }
 
-        const users = await this.jsonOperations.getUsers();
+        const users = await this.jsonOperations.getData();
         //console.dir(`1 ${users}`, {depth: 10});
 
         const user = users.find((u) => {

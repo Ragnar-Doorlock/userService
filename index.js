@@ -2,13 +2,13 @@ const fs = require('node:fs');
 const express = require('express');
 const app = express();
 const bodyParser = require('body-parser');
-const JsonOperations = require('./app/userService/JSONOperations.js');
-const CacheProvider = require('./app/userService/cacheProvider.js');
+const JsonOperations = require('./db/JSONOperations.js');
+const CacheProvider = require('./app/cacheProvider/cacheProvider.js');
 const UserService = require('./app/userService/userService.js');
 
 
 (async () => {
-    const JSON_PATH = './app/userService/db/db.json';
+    const JSON_PATH = './db/db.json';
     
     const jsonOperations = new JsonOperations({ dbPath: JSON_PATH }, { fs });
     const cacheProvider = new CacheProvider();
