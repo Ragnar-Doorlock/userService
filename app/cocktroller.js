@@ -1,33 +1,23 @@
-const express = require('express');
-const app = express();
-const bodyParser = require('body-parser');
-const router = express.Router();
-const jsonBodyParser = bodyParser.json();
-
-const CreateUserInteractor = require('./users/createUser/createUserInteractor.js');
-const DeleteUserInteractor = require('./users/deleteUser/deleteUserInteractor.js');
-const GetUsers = require('./users/getUsers/getUsersInteractor.js');
-const UpdateUserInteractor = require('./users/updateUser/updateUserInteractor.js');
-
-/* router.post('/users/', jsonBodyParser, CreateUserInteractor.createUserInteractor);
-router.get('/users/:userID', GetUsers.getUserByIDInteractor);
-router.post('/users/search-all', jsonBodyParser, GetUsers.getAllUsersInteractor);
-router.post('/users/search-one', jsonBodyParser, GetUsers.getOneUserInteractor);
-router.put('/users/:userID', jsonBodyParser, UpdateUserInteractor.updateUserInteractor);
-router.delete('/users/:userID', DeleteUserInteractor.deleteUserInteractor);
-
-module.exports = router; */
-
 class UsersRouterBuilder {
-    async createRoutes () {
-        router.post('/users/', jsonBodyParser, CreateUserInteractor.createUserInteractor);
-        router.get('/users/:userID', GetUsers.getUserByIDInteractor);
-        router.post('/users/search-all', jsonBodyParser, GetUsers.getAllUsersInteractor);
-        router.post('/users/search-one', jsonBodyParser, GetUsers.getOneUserInteractor);
-        router.put('/users/:userID', jsonBodyParser, UpdateUserInteractor.updateUserInteractor);
-        router.delete('/users/:userID', DeleteUserInteractor.deleteUserInteractor);
+    constructor ({createInteractor}, {getByIDInteractor}, {getAllInteractor}, {getOneInteractor}, {updateInteractor}, {deleteInteractor}, {router}) {
+        this.createUser = createInteractor;
+        this.getByID = getByIDInteractor;
+        this.getAll = getAllInteractor;
+        this.getOne = getOneInteractor;
+        this.updateUser = updateInteractor;
+        this.deleteUser = deleteInteractor;
+        this.router = router;
+    }
 
-        return router;
+    createRoutes () {
+        this.router.post('/users/', this.createUser);
+        this.router.get('/users/:userID', this.getByID);
+        this.router.post('/users/search-all', this.getAll);
+        this.router.post('/users/search-one', this.getOne);
+        this.router.put('/users/:userID', this.updateUser);
+        this.router.delete('/users/:userID', this.updateUser);
+
+        return this.router;
     }
 }
 

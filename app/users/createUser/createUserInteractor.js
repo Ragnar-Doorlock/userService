@@ -11,8 +11,12 @@ const cacheProvider = new CacheProvider();
 const userService = new UserService(jsonOperations, cacheProvider);
 
 exports.createUserInteractor = async (req, res) => {
+
     const userName = req.body.name;
     const userRole = req.body.role;
+    /* const jopa = express.json(req.body);
+    const userName = jopa.name;
+    const userRole = jopa.role; */
 
     await userService.create({name: userName, role: userRole});
     res.sendStatus(200);
