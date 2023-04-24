@@ -1,6 +1,6 @@
 const express = require('express');
 const app = express();
-const fs = require('node:fs')
+const fs = require('node:fs');
 const JsonOperations = require('../../../db/JSONOperations');
 const CacheProvider = require('../../../app/cacheProvider/cacheProvider.js');
 const UserService = require('../userService.js');

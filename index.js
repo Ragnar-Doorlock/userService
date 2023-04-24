@@ -2,20 +2,36 @@ const fs = require('node:fs');
 const express = require('express');
 const app = express();
 const bodyParser = require('body-parser');
-const jsonBodyParser = bodyParser.json();
+//const jsonBodyParser = bodyParser.json();
 const router = express.Router();
 const UsersRouterBuilder = require('./app/cocktroller.js');
+
 const CreateUserInteractor = require('./app/users/createUser/createUserInteractor.js');
+//const { ebanina } = require('./app/users/createUser/createUserInteractor.js');
 const DeleteUserInteractor = require('./app/users/deleteUser/deleteUserInteractor.js');
 const GetUsers = require('./app/users/getUsers/getUsersInteractor.js');
 const UpdateUserInteractor = require('./app/users/updateUser/updateUserInteractor.js');
 
-(async () => {
+const JSON_PATH = require('./db/db.json');
+const CacheProvider = require('./app/cacheProvider/cacheProvider.js');
+const JsonOperations = require('./db/JSONOperations.js');
+const UserService = require('./app/users/userService.js');
 
-    const usersRoutes = new UsersRouterBuilder({createInteractor: CreateUserInteractor.createUserInteractor}, {getByIDInteractor: GetUsers.getUserByIDInteractor}, {getAllInteractor: GetUsers.getAllUsersInteractor}, {getOneInteractor: GetUsers.getOneUserInteractor}, {updateInteractor: UpdateUserInteractor.updateUserInteractor}, {deleteInteractor: DeleteUserInteractor.deleteUserInteractor}, {router});
+(async () => {
     
+    const jsonOperations = new JsonOperations({ dbPath: JSON_PATH }, { fs });
+    const cacheProvider = new CacheProvider();
+    const userService = new UserService(jsonOperations, cacheProvider);
+    const create_user_intearactor = new CreateUserInteractor(userService);
+
+    const usersRoutes = new UsersRouterBuilder({createInteractor: create_user_intearactor.createUser}, 
+        {getByIDInteractor: GetUsers.getUserByIDInteractor}, {getAllInteractor: GetUsers.getAllUsersInteractor}, 
+        {getOneInteractor: GetUsers.getOneUserInteractor}, {updateInteractor: UpdateUserInteractor.updateUserInteractor}, 
+        {deleteInteractor: DeleteUserInteractor.deleteUserInteractor}, {router});
+
     app.use(express.json());
     app.use('/', usersRoutes.createRoutes());
+    //app.post('/users/', create_user_intearactor.createUser);
 
     app.listen(3000, () => console.log(`App listening on port ${3000}!`));
 
