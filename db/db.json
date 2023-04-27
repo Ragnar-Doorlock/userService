@@ -5,10 +5,6 @@
         "role": "new-role"
     },
     {
-        "id": 1679902952522,
-        "name": "Joka"
-    },
-    {
         "id": 1679903078446,
         "name": "Joka",
         "role": "visitor"
@@ -19,8 +15,8 @@
         "role": "visitor"
     },
     {
-        "id": 1682515736212,
+        "id": 1682579349307,
         "name": "BOBAH",
-        "role": "visitor"
+        "role": "Admin"
     }
 ]
