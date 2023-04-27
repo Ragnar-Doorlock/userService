@@ -10,7 +10,8 @@ class CacheProvider {
     }
 
     get(key) {
-        return this.cache.get(key);
+        return this.cache.get(key)[1]; 
+        // [1] чтобы при повторном вызове из кеша не возвращало id мэпа
     }
 
     has(key) {
