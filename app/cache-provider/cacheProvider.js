@@ -1,4 +1,4 @@
-const { Mapp } = require('../myMap/mymap.js');
+const { Mapp } = require('../my-map/mymap.js');
 
 class CacheProvider {
     constructor() {

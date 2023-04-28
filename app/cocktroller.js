@@ -1,44 +1,46 @@
-const CreateUserInteractor = require('../app/users/createUser/createUserInteractor');
-const DeleteUserInteractor = require('../app/users/deleteUser/deleteUserInteractor');
-const GetUsergetUsersInteractors = require('../app/users/getUsers/getUsersInteractor.js');
-const UpdateUserInteractor = require('../app/users/updateUser/updateUserInteractor.js');
+const CreateUserInteractor = require('./users/create-user/createUserInteractor');
+const DeleteUserInteractor = require('./users/delete-user/deleteUserInteractor');
+const {GetUserInteractor} = require('./users/get-users/getUserInteractor.js');
+const {SearchUsersInteractor} = require('./users/get-users/getUserInteractor');
+const UpdateUserInteractor = require('./users/update-user/updateUserInteractor.js');
 
 class UsersRouterBuilder {
-    constructor ({userService}, {router}) {
+    constructor ({userService}, {express}) {
         this.createUser = new CreateUserInteractor(userService);
-        this.getUser = new GetUsergetUsersInteractors(userService);
+        this.getUser = new GetUserInteractor(userService);
+        this.searchUser = new SearchUsersInteractor(userService);
         this.updateUser = new UpdateUserInteractor(userService);
         this.deleteUser = new DeleteUserInteractor(userService);
-        this.router = router;
+        this.router = express.Router();
     }
 
     createRoutes () {
-        this.router.post('/users/', async (req, res) => {
+        this.router.post('/', async (req, res) => {
             this.createUser.execute({name: req.body.name, role: req.body.role});
             res.sendStatus(200);
         });
 
-        this.router.get('/users/:userID', async (req, res) => {
-            const user = await this.getUser.executeByID(req.params.userID);
+        this.router.get('/:userID', async (req, res) => {
+            const user = await this.getUser.execute(req.params.userID);
             res.send(user);
         });
 
-        this.router.post('/users/search-all', async (req, res) => {
-            const user = await this.getUser.executeAll(req.body); 
+        this.router.post('/search', async (req, res) => {
+            const user = await this.searchUser.execute(req.body); 
             res.send(user);
         });
         
-        this.router.post('/users/search-one', async (req, res) => {
-            const user = await this.getUser.executeOne(req.body);
+        /* this.router.post('/search-one', async (req, res) => {
+            const user = await this.searchUser.executeOne(req.body);
             res.send(user);
-        });
+        }); */
         
-        this.router.put('/users/:userID', async (req, res) => {
+        this.router.put('/:userID', async (req, res) => {
             this.updateUser.execute({id: req.params.userID, name: req.body.name, role: req.body.role});
             res.sendStatus(200);
         });
         
-        this.router.delete('/users/:userID', async (req, res) => {
+        this.router.delete('/:userID', async (req, res) => {
             this.deleteUser.execute(req.params.userID);
             res.sendStatus(200);
         });

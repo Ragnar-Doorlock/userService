@@ -1,9 +1,20 @@
-class getUsersInteractor {
+class GetUserInteractor {
     constructor (userService) {
         this.userService = userService;
     }
 
-    async executeAll({ id, name, role }) {
+    async execute (id) {
+        const user = await this.userService.findById(Number(id));
+        return user;
+    }
+}
+
+class SearchUsersInteractor {
+    constructor (userService) {
+        this.userService = userService;
+    }
+
+    async execute({ id, name, role }) {
         if (id) {
             const user = await this.userService.findAll(Number({id}));
             return user;
@@ -18,7 +29,7 @@ class getUsersInteractor {
         }
     }
 
-    async executeOne({ id, name, role }) {
+    /* async executeOne({ id, name, role }) {
         if (id) {
             const user = await this.userService.findOne(Number({id}));
             return user;
@@ -31,12 +42,8 @@ class getUsersInteractor {
             const user = await this.userService.findOne({role});
             return user;
         }
-    }
+    } */
 
-    async executeByID (id) {
-        const user = await this.userService.findById(Number(id));
-        return user;
-    }
 }
 
-module.exports = getUsersInteractor;
+module.exports = { GetUserInteractor, SearchUsersInteractor };
