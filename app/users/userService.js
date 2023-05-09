@@ -26,7 +26,7 @@ class UserService {
 
         const valueExistsInDB = this._hasInDB(id, users);
         if (!valueExistsInDB) {
-            // throw Error('User not found');
+            //throw Error('User not found');
             return;
         }
 
