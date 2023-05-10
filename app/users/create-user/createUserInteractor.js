@@ -1,4 +1,5 @@
 const ValidationError = require('../../errorHandler');
+const ApiError = require('../../errorHandler');
 const NotFound = require('../../errorHandler');
 const BadRequest = require('../../errorHandler');
 
@@ -19,13 +20,13 @@ class CreateUserInteractor {
             res.sendStatus(200);
         } catch(err) {
             if (err.name == 'ValidationError') {
-                res.status(500).send(new ValidationError('Validation failed'));
+                res.status(400).send(new ValidationError('Validation failed', err.stack));
             }
             if (err.name == 'SyntaxError') {
                 res.status(400).send(new BadRequest('Bad request'));
             }
             else {
-                res.status(500).send(err.name);
+                res.status(500).send(new ApiError(err.name, err.stack));
             }
         }
 
