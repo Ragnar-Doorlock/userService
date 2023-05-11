@@ -3,7 +3,7 @@ const DeleteUserInteractor = require('./users/delete-user/deleteUserInteractor')
 const {GetUserInteractor} = require('./users/get-users/getUserInteractor.js');
 const {SearchUsersInteractor} = require('./users/get-users/getUserInteractor');
 const UpdateUserInteractor = require('./users/update-user/updateUserInteractor.js');
-const ErrorHandler = require('../app/errorHandler');
+const ErrorHandler = require('./error-handler/apiError');
 const errorHandler = new ErrorHandler();
 
 class UsersRouterBuilder {
@@ -19,7 +19,12 @@ class UsersRouterBuilder {
     createRoutes () {
 
         this.router.post('/', async (req, res) => {
-            this.createUser.execute({name: req.body.name, role: req.body.role}, res);
+            try {
+                await this.createUser.execute({name: req.body.name, role: req.body.role});
+                res.sendStatus(200);
+            } catch(err) {
+                res.status(err.httpCode).send(err);
+            }
         });
 
         this.router.get('/:userID', async (req, res) => {

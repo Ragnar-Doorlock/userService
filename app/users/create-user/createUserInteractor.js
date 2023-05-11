@@ -1,33 +1,32 @@
-const ValidationError = require('../../errorHandler');
-const ApiError = require('../../errorHandler');
-const NotFound = require('../../errorHandler');
-const BadRequest = require('../../errorHandler');
+const ValidationError = require('../../error-handler/apiError');
+const ApiError = require('../../error-handler/apiError');
+const NotFound = require('../../error-handler/notFound');
+const BadRequest = require('../../error-handler/badRequest');
 
 class CreateUserInteractor {
     constructor (userService) {
         this.userService = userService;
     }
 
-    async execute({name, role}, res) {
+    async execute({name, role}) {
 
         try {
-
-            //
             //j
-            //
-
             await this.userService.create({name, role});
-            res.sendStatus(200);
+            
         } catch(err) {
-            if (err.name == 'ValidationError') {
-                res.status(400).send(new ValidationError('Validation failed', err.stack));
+            
+            switch (err.name) {
+                case 'ValidationError':
+                    throw new ValidationError(err.stack);
+                case 'SyntaxError':
+                    throw new BadRequest(err.stack);
+                case 'ReferenceError':
+                    throw new ApiError(503, err.name, err.stack);
+                default:
+                    throw new ApiError(500, err.name, err.stack);
             }
-            if (err.name == 'SyntaxError') {
-                res.status(400).send(new BadRequest('Bad request'));
-            }
-            else {
-                res.status(500).send(new ApiError(err.name, err.stack));
-            }
+
         }
 
     }
