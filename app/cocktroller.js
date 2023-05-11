@@ -19,22 +19,47 @@ class UsersRouterBuilder {
     createRoutes () {
 
         this.router.post('/', async (req, res) => {
+            
             try {
+
                 await this.createUser.execute({name: req.body.name, role: req.body.role});
                 res.sendStatus(200);
+
             } catch(err) {
+                
                 res.status(err.httpCode).send(err);
+            
             }
         });
 
         this.router.get('/:userID', async (req, res) => {
-            const user = await this.getUser.execute(req.params.userID);
-            res.send(user);
+            
+            try {
+
+                const user = await this.getUser.execute(req.params.userID);
+                res.status(200).send(user);
+
+            } catch (err) {
+
+                res.status(err.httpCode).send(err);
+            
+            }
         });
 
         this.router.post('/search', async (req, res) => {
-            const user = await this.searchUser.execute(req.body); 
-            res.send(user);
+            /* const user = await this.searchUser.execute(req.body); 
+            res.send(user); */
+
+            try {
+
+                const user = await this.searchUser.execute(req.body);
+                res.status(200).send(user);
+
+            } catch (err) {
+
+                res.status(err.httpCode).send(err);
+
+            }
         });
         
         /* this.router.post('/search-one', async (req, res) => {
@@ -43,13 +68,33 @@ class UsersRouterBuilder {
         }); */
         
         this.router.put('/:userID', async (req, res) => {
-            this.updateUser.execute({id: req.params.userID, name: req.body.name, role: req.body.role});
-            res.sendStatus(200);
+            
+            try {
+
+                await this.updateUser.execute({id: req.params.userID, name: req.body.name, role: req.body.role});
+                res.sendStatus(200);
+
+            } catch (err) {
+
+                res.status(err.httpCode).send(err);
+
+            }
+            
         });
         
         this.router.delete('/:userID', async (req, res) => {
-            this.deleteUser.execute(req.params.userID);
-            res.sendStatus(200);
+            
+            try {
+
+                await this.deleteUser.execute(req.params.userID);
+                res.sendStatus(200);
+
+            } catch (err) {
+
+                res.status(err.httpCode).send(err);
+
+            }
+            
         });
 
         return this.router;
