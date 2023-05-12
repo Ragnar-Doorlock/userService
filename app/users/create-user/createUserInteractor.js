@@ -1,7 +1,7 @@
-const ValidationError = require('../../error-handler/apiError');
-const ApiError = require('../../error-handler/apiError');
-const NotFound = require('../../error-handler/notFound');
-const BadRequest = require('../../error-handler/badRequest');
+const ValidationError = require('../../errors/apiError');
+const ApiError = require('../../errors/apiError');
+const NotFound = require('../../errors/notFound');
+const BadRequest = require('../../errors/badRequest');
 
 class CreateUserInteractor {
     constructor (userService) {
@@ -18,25 +18,19 @@ class CreateUserInteractor {
             
             switch (err.name) {
                 case 'ValidationError':
-                    throw new ValidationError(400, 'Validation Error', err.stack);
+                    throw new ValidationError(err.stack);
                 case 'SyntaxError':
-                    throw new BadRequest(400, 'Bad Request', err.stack);
+                    throw new BadRequest(err.stack);
                 case 'ReferenceError':
-                    throw new ApiError(503, err.name, err.stack);
+                    throw new ApiError(err.stack);
                 default:
-                    throw new ApiError(500, err.name, err.stack);
+                    throw new ApiError(err.stack);
             }
 
         }
 
     }
-
-    /* async execute({name, role}, res) {
-        
-        await this.userService.create({name, role});
-        res.sendStatus(200);
-
-    } */
+    
 }
 
 module.exports = CreateUserInteractor;

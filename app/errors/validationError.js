@@ -1,8 +1,9 @@
 const ApiError = require('./apiError');
 
 class ValidationError extends ApiError {
-    constructor (error) {
-        super(httpCode = 400, message = 'Validation failed', error);
+    constructor (message) {
+        super(message);
+        this.httpCode = 400; 
         this.name = this.constructor.name;
     }
 }

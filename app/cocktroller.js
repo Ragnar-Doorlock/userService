@@ -3,8 +3,6 @@ const DeleteUserInteractor = require('./users/delete-user/deleteUserInteractor')
 const {GetUserInteractor} = require('./users/get-users/getUserInteractor.js');
 const {SearchUsersInteractor} = require('./users/get-users/getUserInteractor');
 const UpdateUserInteractor = require('./users/update-user/updateUserInteractor.js');
-const ErrorHandler = require('./error-handler/apiError');
-const errorHandler = new ErrorHandler();
 
 class UsersRouterBuilder {
     constructor ({userService}, {express}) {
@@ -30,6 +28,7 @@ class UsersRouterBuilder {
                 res.status(err.httpCode).send(err);
             
             }
+            
         });
 
         this.router.get('/:userID', async (req, res) => {
@@ -44,6 +43,7 @@ class UsersRouterBuilder {
                 res.status(err.httpCode).send(err);
             
             }
+
         });
 
         this.router.post('/search', async (req, res) => {
@@ -60,6 +60,7 @@ class UsersRouterBuilder {
                 res.status(err.httpCode).send(err);
 
             }
+
         });
         
         /* this.router.post('/search-one', async (req, res) => {
@@ -99,6 +100,7 @@ class UsersRouterBuilder {
 
         return this.router;
     }
+
 }
 
 module.exports = UsersRouterBuilder;

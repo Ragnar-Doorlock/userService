@@ -1,7 +1,7 @@
-const ValidationError = require('../../error-handler/apiError');
-const ApiError = require('../../error-handler/apiError');
-const NotFound = require('../../error-handler/notFound');
-const BadRequest = require('../../error-handler/badRequest');
+const ValidationError = require('../../errors/apiError');
+const ApiError = require('../../errors/apiError');
+const NotFound = require('../../errors/notFound');
+const BadRequest = require('../../errors/badRequest');
 
 class UpdateUserInteractor {
     constructor (userService) {
@@ -16,7 +16,7 @@ class UpdateUserInteractor {
 
             if (!userExists) {
                 
-                throw new NotFound(404, 'Not Found', `User with id '${id}' was not found`);
+                throw new NotFound(`User with id '${id}' was not found`);
 
             }
 
@@ -30,16 +30,17 @@ class UpdateUserInteractor {
                 case 'SyntaxError':
                     throw new BadRequest(err.stack);
                 case 'ReferenceError':
-                    throw new ApiError(503, err.name, err.stack);
+                    throw new ApiError(err.stack);
                 case 'NotFound':
-                    throw new NotFound(err.httpCode, err.message, err.stack);
+                    throw new NotFound(err.message);
                 default:
-                    throw new ApiError(500, err.name, err.stack);
+                    throw new ApiError(err.stack);
             }
 
         }
         
     }
+    
 }
 
 module.exports = UpdateUserInteractor;
