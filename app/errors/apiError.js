@@ -1,6 +1,6 @@
 class ApiError {
-    constructor(message, error) {
-        this.httpCode = 500;
+    constructor({httpCode, message}) {
+        this.httpCode = httpCode || 500;
         this.name = 'API Error';
         this.message = message;
         //this.stack = error;

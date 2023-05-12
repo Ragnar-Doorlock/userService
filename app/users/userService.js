@@ -67,6 +67,9 @@ class UserService {
     }
 
     async findAll({ id, name, role }) {
+
+        const numberID = Number(id);
+
         if (this.cacheProvider.has(`${id}_${name}_${role}`)) {
             //console.log('Get value from cache: ', this.cacheProvider.entries());
 
@@ -78,7 +81,7 @@ class UserService {
 
         const user = users.find((u) => {
             if (id) {
-                return u.id === id;
+                return u.id === numberID;
             }
 
             if (name) {

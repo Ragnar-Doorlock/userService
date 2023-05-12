@@ -28,7 +28,7 @@ class UsersRouterBuilder {
                 res.status(err.httpCode).send(err);
             
             }
-            
+
         });
 
         this.router.get('/:userID', async (req, res) => {
@@ -47,8 +47,6 @@ class UsersRouterBuilder {
         });
 
         this.router.post('/search', async (req, res) => {
-            /* const user = await this.searchUser.execute(req.body); 
-            res.send(user); */
 
             try {
 

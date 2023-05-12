@@ -19,10 +19,10 @@ class CreateUserInteractor {
             switch (err.name) {
                 case 'ValidationError':
                     throw new ValidationError(err.stack);
-                case 'SyntaxError':
+                /* case 'SyntaxError':
                     throw new BadRequest(err.stack);
                 case 'ReferenceError':
-                    throw new ApiError(err.stack);
+                    throw new ApiError(err.stack); */
                 default:
                     throw new ApiError(err.stack);
             }

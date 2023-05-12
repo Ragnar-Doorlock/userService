@@ -9,35 +9,18 @@ class GetUserInteractor {
     }
 
     async execute (id) {
-        try {
 
-            const user = await this.userService.findById(Number(id));
-            
-            if (user === null) {
-
-                // хуйня то, шо и тут кидаю NotFound и далее в кетче снова NotFound?
-                throw new NotFound(`User with id '${id}' was not found`);
-
-            }
-            return user;
-
-        } catch (err) {
-
-            switch (err.name) {
-                case 'ValidationError':
-                    throw new ValidationError(err.stack);
-                case 'SyntaxError':
-                    throw new BadRequest(err.stack);
-                case 'ReferenceError':
-                    throw new ApiError(err.stack);
-                case 'NotFound':
-                    throw new NotFound(err.message);
-                default:
-                    throw new ApiError(err.stack);
-            }
-
+        if (id.length == 0) {
+            throw new ValidationError('Incorrect id');
         }
-        
+
+        const user = await this.userService.findById(id);
+
+        if (user === null) {
+            throw new NotFound(`User with id '${id}' was not found`);
+        }
+
+        return user;
     }
 
 }
@@ -48,45 +31,58 @@ class SearchUsersInteractor {
     }
 
     async execute({ id, name, role }) {
-        try {
 
-            if (id) {
-                const numberID = Number(id);
-                const user = await this.userService.findAll({id: numberID});
-                if (user === null) {
-                    throw new NotFound(`User with id '${id}' was not found`);
-                }
-                return user;
-            }
-            if (name) {
-                const user = await this.userService.findAll({name});
-                if (user === null) {
-                    throw new NotFound(`User with name '${name}' was not found`);
-                }
-                return user;
-            }
-            if (role) {
-                const user = await this.userService.findAll({role});
-                if (user === null) {
-                    throw new NotFound(`User with role '${role}' was not found`);
-                }
-                return user;
+        if (id && name && role == undefined) {
+
+            throw new ValidationError('ebat');
+        
+        }
+
+        if (id) {
+
+            if (id.length == 0) {
+                throw new ValidationError('Incorrect id field');
             }
 
-        } catch (err) {
+            const user = await this.userService.findAll({id});
 
-            switch (err.name) {
-                case 'ValidationError':
-                    throw new ValidationError(err.stack);
-                case 'SyntaxError':
-                    throw new BadRequest(err.stack);
-                case 'ReferenceError':
-                    throw new ApiError(err.stack);
-                case 'NotFound':
-                    throw new NotFound(err.message);
-                default:
-                    throw new ApiError(err.stack);
+            if (user === null) {
+                throw new NotFound(`User with id '${id}' was not found`);
             }
+
+            return user;
+        
+        }
+            
+        if (name) {
+
+            if (name.length == 0) {
+                throw new ValidationError('Incorrect name field');
+            }
+
+            const user = await this.userService.findAll({name});
+                
+            if (user === null) {
+                throw new NotFound(`User with name '${name}' was not found`);
+            }
+
+            return user;
+
+        }
+        
+        if (role) {
+
+            if (role.length == 0) {
+                throw new ValidationError('Incorrect role field');
+            }
+
+            const user = await this.userService.findAll({role});
+
+            if (user === null) {
+                throw new NotFound(`User with role '${role}' was not found`);
+            }
+
+            return user;
 
         }
         
