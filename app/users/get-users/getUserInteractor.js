@@ -43,9 +43,9 @@ class SearchUsersInteractor {
         if (id) {
 
             // не работает... 
-            /* if (id.length === 0) {
+             if (!id) {
                 throw new ValidationError('Incorrect id field');
-            } */
+            }
 
             const user = await this.userService.findAll({id});
 
