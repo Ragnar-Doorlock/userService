@@ -1,7 +1,7 @@
 const CreateUserInteractor = require('./users/create-user/createUserInteractor');
 const DeleteUserInteractor = require('./users/delete-user/deleteUserInteractor');
 const {GetUserInteractor} = require('./users/get-users/getUserInteractor.js');
-const {SearchUsersInteractor} = require('./users/get-users/getUserInteractor');
+const {SearchUsersInteractor} = require('./users/get-users/searchUserInteractor');
 const UpdateUserInteractor = require('./users/update-user/updateUserInteractor.js');
 
 class UsersRouterBuilder {
