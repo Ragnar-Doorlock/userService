@@ -22,21 +22,23 @@ class UserService {
     }
 
     async update({ id, name, role }) {
+
+        const numberID = Number(id);
         const users = await this.jsonOperations.getData(); 
 
-        const valueExistsInDB = this._hasInDB(id, users);
+        const valueExistsInDB = this._hasInDB(numberID, users);
         if (!valueExistsInDB) {
             //throw Error('User not found');
             return;
         }
 
         const updatedData = users.map((user) => {
-            if (user.id !== id) {
+            if (user.id !== numberID) {
                 return user;
             }
 
             return {
-                id,
+                id: numberID,
                 name,
                 role,
             };
@@ -49,15 +51,17 @@ class UserService {
 
     }
 
-    async delete(id) {
+    async delete({id}) {
+
+        const numberID = Number(id);
         const users = await this.jsonOperations.getData();
 
-        const valueExistsInDB = this._hasInDB(id, users);
+        const valueExistsInDB = this._hasInDB(numberID, users);
         if (!valueExistsInDB) {
             return;
         }
 
-        const updatedData = users.filter((user) => user.id !== id);
+        const updatedData = users.filter((user) => user.id !== numberID);
 
         await this.jsonOperations.writeData(updatedData);
 
@@ -66,7 +70,7 @@ class UserService {
 
     }
 
-    async findAll({ id, name, role }) {
+    /* async findAll({ id, name, role }) {
 
         const numberID = Number(id);
 
@@ -101,6 +105,40 @@ class UserService {
         //console.log('Set value in cache: ', this.cacheProvider.entries());
 
         return user;
+    } */
+
+    async findAll({ id, name, role }) {
+        const numberID = Number(id);
+
+        if (this.cacheProvider.has(`${id}_${name}_${role}`)) {
+            //console.log('Get value from cache: ', this.cacheProvider.entries());
+
+            return this.cacheProvider.get(`${id}_${name}_${role}`);
+        }
+
+        const buffer = [];
+    
+        const users = await this.jsonOperations.getData();
+        //console.dir(1 ${users}, {depth: 10});
+
+        for (const user of users) {
+            if (id) {
+                if (user.id === numberID) buffer.push(user);
+            }
+
+            if (name) {
+                if (user.name === name) buffer.push(user);
+            }
+
+            if (role) {
+                if (user.role === role) buffer.push(user);
+            }
+        }
+
+        this.cacheProvider.set(`${id}_${name}_${role}`, buffer);
+        //console.log('Set value in cache: ', this.cacheProvider.entries());
+
+        return buffer;
     }
 
     findOne({ id, name, role }) {
@@ -108,7 +146,7 @@ class UserService {
         return result;
     }
 
-    findById(id) {
+    findById({id}) {
         return this.findOne({ id });
     }
 

@@ -10,19 +10,13 @@ class SearchUsersInteractor {
 
     async execute({ id, name, role }) {
 
-        // не работает... 
-        /* if (id && name && role === undefined) {
+        if (!id && !name && !role) {
 
             throw new ValidationError('ebat');
         
-        } */
+        }
 
-        if (id) {
-
-            // не работает... 
-             if (!id) {
-                throw new ValidationError('Incorrect id field');
-            }
+        if (id && (id.length > 9)) {
 
             const user = await this.userService.findAll({id});
 
@@ -34,12 +28,8 @@ class SearchUsersInteractor {
         
         }
             
-        if (name) {
+        if (name && (name.length > 0)) {
 
-            // не работает...
-            /* if (name.length === 0) {
-                throw new ValidationError('Incorrect name field');
-            } */
 
             const user = await this.userService.findAll({name});
                 
@@ -51,12 +41,9 @@ class SearchUsersInteractor {
 
         }
         
-        if (role) {
+        if (role && (role.length > 0)) {
 
-            //console.log(typeof JSON.parse(role)); вообще не реагирует если пустое поле
-
-            //бля ну хз, все равно если пустое поле отправлять, то 200 ОК (ну охуеть)
-            if (role !== 'visitor' || "admin" || 'new-role') {
+            if (!['admin', 'visitor', 'new-role'].includes(role)) {
                 throw new ValidationError('Incorrect role field');
             }
 
@@ -71,21 +58,6 @@ class SearchUsersInteractor {
         }
         
     }
-
-    /* async executeOne({ id, name, role }) {
-        if (id) {
-            const user = await this.userService.findOne(Number({id}));
-            return user;
-        }
-        if (name) {
-            const user = await this.userService.findOne({name});
-            return user;
-        }
-        if (role) {
-            const user = await this.userService.findOne({role});
-            return user;
-        }
-    } */
 
 }
 

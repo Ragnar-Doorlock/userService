@@ -8,14 +8,9 @@ class GetUserInteractor {
         this.userService = userService;
     }
 
-    async execute (id) {
+    async execute ({id}) {
 
-        // не работает... 
-        /* if (id.length === 0) {
-            throw new ValidationError('Incorrect id');
-        } */
-
-        const user = await this.userService.findById(id);
+        const user = await this.userService.findById({id});
 
         if (user === null) {
             throw new NotFound(`User with id '${id}' was not found`);

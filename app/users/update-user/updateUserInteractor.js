@@ -9,36 +9,17 @@ class UpdateUserInteractor {
     }
 
     async execute({id, name, role}) {
-        try {
+            //const numberID = Number(id);
+            const user = await this.userService.findById({id});
 
-            const numberID = Number(id);
-            const userExists = await this.userService.findById(numberID);
-
-            if (!userExists) {
+            if (user.length === 0) {
                 
                 throw new NotFound(`User with id '${id}' was not found`);
 
             }
 
-            await this.userService.update({id: numberID, name, role});
+            await this.userService.update({id, name, role});
 
-        } catch (err) {
-
-            switch (err.name) {
-                case 'ValidationError':
-                    throw new ValidationError(err.stack);
-                case 'SyntaxError':
-                    throw new BadRequest(err.stack);
-                case 'ReferenceError':
-                    throw new ApiError(err.stack);
-                case 'NotFound':
-                    throw new NotFound(err.message);
-                default:
-                    throw new ApiError(err.stack);
-            }
-
-        }
-        
     }
     
 }

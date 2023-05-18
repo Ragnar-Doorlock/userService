@@ -1,11 +1,13 @@
 const CreateUserInteractor = require('./users/create-user/createUserInteractor');
 const DeleteUserInteractor = require('./users/delete-user/deleteUserInteractor');
 const {GetUserInteractor} = require('./users/get-users/getUserInteractor.js');
-const {SearchUsersInteractor} = require('./users/get-users/searchUserInteractor');
+const {SearchUsersInteractor} = require('./users/search-users/searchUserInteractor');
 const UpdateUserInteractor = require('./users/update-user/updateUserInteractor.js');
 
 class UsersRouterBuilder {
     constructor ({userService}, {express}) {
+
+        //вынести в каждый рут
         this.createUser = new CreateUserInteractor(userService);
         this.getUser = new GetUserInteractor(userService);
         this.searchUser = new SearchUsersInteractor(userService);
@@ -16,6 +18,7 @@ class UsersRouterBuilder {
 
     createRoutes () {
 
+        //после презентера не должно будет быть res.send 200/500
         this.router.post('/', async (req, res) => {
             
             try {
@@ -35,7 +38,7 @@ class UsersRouterBuilder {
             
             try {
 
-                const user = await this.getUser.execute(req.params.userID);
+                const user = await this.getUser.execute({id: req.params.userID});
                 res.status(200).send(user);
 
             } catch (err) {
@@ -50,7 +53,7 @@ class UsersRouterBuilder {
 
             try {
 
-                const user = await this.searchUser.execute(req.body);
+                const user = await this.searchUser.execute({name: req.body.name, role: req.body.role});
                 res.status(200).send(user);
 
             } catch (err) {
@@ -85,7 +88,7 @@ class UsersRouterBuilder {
             
             try {
 
-                await this.deleteUser.execute(req.params.userID);
+                await this.deleteUser.execute({id: req.params.userID});
                 res.sendStatus(200);
 
             } catch (err) {

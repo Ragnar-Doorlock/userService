@@ -10,25 +10,16 @@ class CreateUserInteractor {
 
     async execute({name, role}) {
 
-        try {
-            //j
-            await this.userService.create({name, role});
-            
-        } catch(err) {
-            
-            switch (err.name) {
-                case 'ValidationError':
-                    throw new ValidationError(err.stack);
-                /* case 'SyntaxError':
-                    throw new BadRequest(err.stack);
-                case 'ReferenceError':
-                    throw new ApiError(err.stack); */
-                default:
-                    throw new ApiError(err.stack);
-            }
-
+        if (!name && !role) {
+            throw new ValidationError('No name and role');
         }
 
+        if (role && (!['admin', 'visitor'].includes(role))) {
+            throw new ValidationError('Incorrect role');
+        }
+
+        await this.userService.create({name, role});
+            
     }
     
 }

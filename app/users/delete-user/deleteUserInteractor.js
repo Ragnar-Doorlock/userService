@@ -8,38 +8,19 @@ class DeleteUserInteractor {
         this.userService = userService;
     }
 
-    async execute (id) {
-        
-        try {
+    async execute ({id}) {
 
-            const numberID = Number(id);
-            const userExists = await this.userService.findById(numberID);
+        const user = await this.userService.findById({id});
 
-            if (!userExists) {
+        //скорее всего хуйня, хотя работает
+        if (user.length === 0) {
                 
-                throw new NotFound(`User with id '${id}' was not found`);
-
-            }
-
-            await this.userService.delete(numberID);
-
-        } catch (err) {
-
-            switch (err.name) {
-                case 'ValidationError':
-                    throw new ValidationError(err.stack);
-                case 'SyntaxError':
-                    throw new BadRequest(err.stack);
-                case 'ReferenceError':
-                    throw new ApiError(err.stack);
-                case 'NotFound':
-                    throw new NotFound(err.message);
-                default:
-                    throw new ApiError(err.stack);
-            }
+            throw new NotFound(`User with id '${id}' was not found`);
 
         }
-        
+
+        await this.userService.delete({id});
+
     }
     
 }
