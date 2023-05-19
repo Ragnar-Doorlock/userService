@@ -4,21 +4,24 @@ const NotFound = require('../../errors/notFound');
 const BadRequest = require('../../errors/badRequest');
 
 class UpdateUserInteractor {
-    constructor (userService) {
+    constructor ({presenter, userService}) {
         this.userService = userService;
+        this.presenter = presenter;
     }
 
     async execute({id, name, role}) {
-            //const numberID = Number(id);
-            const user = await this.userService.findById({id});
 
-            if (user.length === 0) {
-                
-                throw new NotFound(`User with id '${id}' was not found`);
+        const user = await this.userService.findById({id});
 
-            }
+        if (user.length === 0) {
+            
+            this.presenter.presentFailure( new NotFound(`User with id '${id}' was not found`) );
+            return;
 
-            await this.userService.update({id, name, role});
+        }
+
+        await this.userService.update({id, name, role});
+        return this.presenter.presentSuccess();
 
     }
     

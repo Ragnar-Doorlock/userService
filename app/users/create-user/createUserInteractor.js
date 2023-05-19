@@ -9,20 +9,6 @@ class CreateUserInteractor {
         this.presenter = presenter;
     }
 
-    /* async execute({name, role}) {
-
-        if (!name && !role) {
-            throw new ValidationError('No name and role');
-        }
-
-        if (role && (!['admin', 'visitor'].includes(role))) {
-            throw new ValidationError('Incorrect role');
-        }
-
-        await this.userService.create({name, role});
-            
-    } */
-
     async execute({name, role}) {
 
         if (!name && !role) {
@@ -37,7 +23,7 @@ class CreateUserInteractor {
 
         await this.userService.create({name, role});
 
-        return this.presenter.presentSuccess({status: 200});
+        return this.presenter.presentSuccess();
 
     }
     

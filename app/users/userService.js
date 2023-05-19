@@ -134,7 +134,7 @@ class UserService {
                 if (user.role === role) buffer.push(user);
             }
         }
-
+        
         this.cacheProvider.set(`${id}_${name}_${role}`, buffer);
         //console.log('Set value in cache: ', this.cacheProvider.entries());
 

@@ -14,20 +14,8 @@ class UsersRouterBuilder {
 
     createRoutes () {
 
-        //после презентера не должно будет быть res.send 200/500
         this.router.post('/', async (req, res) => {
 
-            /* const createUser = new CreateUserInteractor(this.userService);
-            
-            try {
-                await createUser.execute({name: req.body.name, role: req.body.role});
-                res.sendStatus(200);
-
-            } catch(err) {
-                
-                res.status(err.httpCode).send(err);
-            
-            } */
             const presenter = new HttpPresenter(req, res);
             const interactor = new CreateUserInteractor({presenter, userService: this.userService});
 
@@ -45,16 +33,16 @@ class UsersRouterBuilder {
 
         this.router.get('/:userID', async (req, res) => {
 
-            const getUser = new GetUserInteractor(this.userService);
+            const presenter = new HttpPresenter(req, res);
+            const interactor = new GetUserInteractor({presenter, userService: this.userService});
             
             try {
 
-                const user = await getUser.execute({id: req.params.userID});
-                res.status(200).send(user);
+                await interactor.execute({id: req.params.userID});
 
             } catch (err) {
 
-                res.status(err.httpCode).send(err);
+                presenter.presentFailure(err);
             
             }
 
@@ -62,16 +50,16 @@ class UsersRouterBuilder {
 
         this.router.post('/search', async (req, res) => {
 
-            const searchUser = new SearchUsersInteractor(this.userService);
+            const presenter = new HttpPresenter(req, res);
+            const interactor = new SearchUsersInteractor({presenter, userService: this.userService});
 
             try {
 
-                const user = await searchUser.execute({name: req.body.name, role: req.body.role});
-                res.status(200).send(user);
+                await interactor.execute({id: req.body.id, name: req.body.name, role: req.body.role});
 
             } catch (err) {
 
-                res.status(err.httpCode).send(err);
+                presenter.presentFailure(err);
 
             }
 
@@ -84,16 +72,16 @@ class UsersRouterBuilder {
         
         this.router.put('/:userID', async (req, res) => {
             
-            const updateUser = new UpdateUserInteractor(this.userService);
+            const presenter = new HttpPresenter(req, res);
+            const interactor = new UpdateUserInteractor({presenter, userService: this.userService});
 
             try {
 
-                await updateUser.execute({id: req.params.userID, name: req.body.name, role: req.body.role});
-                res.sendStatus(200);
+                await interactor.execute({id: req.params.userID, name: req.body.name, role: req.body.role});
 
             } catch (err) {
 
-                res.status(err.httpCode).send(err);
+                presenter.presentFailure(err);
 
             }
             
@@ -101,16 +89,16 @@ class UsersRouterBuilder {
         
         this.router.delete('/:userID', async (req, res) => {
 
-            const deleteUser = new DeleteUserInteractor(this.userService);
+            const presenter = new HttpPresenter(req, res);
+            const interactor = new DeleteUserInteractor({presenter, userService: this.userService});
             
             try {
 
-                await deleteUser.execute({id: req.params.userID});
-                res.sendStatus(200);
+                await interactor.execute({id: req.params.userID});
 
             } catch (err) {
 
-                res.status(err.httpCode).send(err);
+                presenter.presentFailure(err);
 
             }
             

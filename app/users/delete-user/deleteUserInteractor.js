@@ -4,22 +4,24 @@ const NotFound = require('../../errors/notFound');
 const BadRequest = require('../../errors/badRequest');
 
 class DeleteUserInteractor {
-    constructor (userService) {
+    constructor ({presenter, userService}) {
         this.userService = userService;
+        this.presenter = presenter;
     }
 
     async execute ({id}) {
 
         const user = await this.userService.findById({id});
 
-        //скорее всего хуйня, хотя работает
         if (user.length === 0) {
                 
-            throw new NotFound(`User with id '${id}' was not found`);
+            this.presenter.presentFailure( new NotFound(`User with id '${id}' was not found`) );
+            return;
 
         }
 
         await this.userService.delete({id});
+        return this.presenter.presentSuccess();
 
     }
     

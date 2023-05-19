@@ -4,21 +4,21 @@ class HttpPresenter {
         this.res = res;
     }
 
-    presentSuccess ({status, body}) {
+    presentSuccess (response) {
 
-        if (status) {
-            this.res.sendStatus(status); // это для создания узера, например, нам только статус нужно отдать что всё заебок
+        if (response) {
+            this.res.status(200).send(response);
+            return;
         }
 
-        if (body) {
-            this.res.status(200).send(body); // а тут отдавать результат поиска search user, например
-        }
+        this.res.sendStatus(200);
         
     }
 
     presentFailure (err) {
 
         this.res.status(err.httpCode).send(err);
+
     }
 
 }
