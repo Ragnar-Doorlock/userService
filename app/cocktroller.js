@@ -1,3 +1,4 @@
+const HttpPresenter = require('./httpPresenter');
 const CreateUserInteractor = require('./users/create-user/createUserInteractor');
 const DeleteUserInteractor = require('./users/delete-user/deleteUserInteractor');
 const {GetUserInteractor} = require('./users/get-users/getUserInteractor.js');
@@ -16,7 +17,7 @@ class UsersRouterBuilder {
         //после презентера не должно будет быть res.send 200/500
         this.router.post('/', async (req, res) => {
 
-            const createUser = new CreateUserInteractor(this.userService);
+            /* const createUser = new CreateUserInteractor(this.userService);
             
             try {
                 await createUser.execute({name: req.body.name, role: req.body.role});
@@ -26,6 +27,18 @@ class UsersRouterBuilder {
                 
                 res.status(err.httpCode).send(err);
             
+            } */
+            const presenter = new HttpPresenter(req, res);
+            const interactor = new CreateUserInteractor({presenter, userService: this.userService});
+
+            try {
+
+                await interactor.execute({name: req.body.name, role: req.body.role});
+
+            } catch(err) {
+
+                presenter.presentFailure(err);
+
             }
 
         });
