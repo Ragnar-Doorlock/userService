@@ -1,7 +1,4 @@
-const nameError = require('../../errors/error-texts/nameErrors');
-const roleError = require('../../errors/error-texts/roleErrors');
-
-class CreateUserValidator {
+class CreateInteractorValidator {
     
     validate({name, role}) {
         
@@ -9,19 +6,18 @@ class CreateUserValidator {
 
         if (!name && !role) {
             errors.push('Name and Role are required');
-            return errors;
         }
 
         if (!name) {
-            errors.push(nameError.required);
+            errors.push('Name is required');
         }
 
         if (!role) {
-            errors.push(roleError.required);
+            errors.push('Role is required');
         }
         
         if (!['admin', 'visitor'].includes(role)) {
-            errors.push(roleError.invalid);
+            errors.push('Invalid role');
         }
 
         return errors;
@@ -29,4 +25,4 @@ class CreateUserValidator {
 
 }
 
-module.exports = CreateUserValidator;
+module.exports = CreateInteractorValidator;

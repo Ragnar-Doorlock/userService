@@ -1,4 +1,4 @@
-const ValidationError = require('../../errors/apiError');
+const ValidationError = require('../../errors/validationError');
 const ApiError = require('../../errors/apiError');
 const NotFound = require('../../errors/notFound');
 const BadRequest = require('../../errors/badRequest');
@@ -12,16 +12,6 @@ class CreateUserInteractor {
 
     async execute({name, role}) {
 
-        /* if (!name && !role) {
-            this.presenter.presentFailure( new ValidationError('No name and role') );
-            return;
-        }
-
-        if (role && (!['admin', 'visitor'].includes(role))) {
-            this.presenter.presentFailure( new ValidationError('Incorrect role') );
-            return;
-        } */
-
         const errors = this.validator.validate({name, role});
 
         if (errors.length > 0) {
@@ -33,7 +23,7 @@ class CreateUserInteractor {
 
         await this.userService.create({name, role});
 
-        return this.presenter.presentSuccess();
+        this.presenter.presentSuccess();
 
     }
     

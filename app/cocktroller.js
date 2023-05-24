@@ -4,7 +4,11 @@ const DeleteUserInteractor = require('./users/delete-user/deleteUserInteractor')
 const {GetUserInteractor} = require('./users/get-users/getUserInteractor.js');
 const {SearchUsersInteractor} = require('./users/search-users/searchUserInteractor');
 const UpdateUserInteractor = require('./users/update-user/updateUserInteractor.js');
-const CreateUserValidator = require('../app/users/create-user/createInteractorValidator');
+const CreateInteractorValidator = require('../app/users/create-user/createInteractorValidator');
+const GetInteractorValidator = require('./users/get-users/getIneractorValidator');
+const DeleteInteractorValidator = require('./users/delete-user/deleteInteractorValidator');
+const SearchInteractorValidator = require('./users/search-users/searchInteractorValidator');
+const UpdateInteractorValidator = require('./users/update-user/updateInteractorValidator');
 
 
 class UsersRouterBuilder {
@@ -18,7 +22,7 @@ class UsersRouterBuilder {
 
         this.router.post('/', async (req, res) => {
 
-            const validator = new CreateUserValidator();
+            const validator = new CreateInteractorValidator();
             const presenter = new HttpPresenter(req, res);
             const interactor = new CreateUserInteractor({presenter, userService: this.userService, validator});
 
@@ -36,8 +40,9 @@ class UsersRouterBuilder {
 
         this.router.get('/:userID', async (req, res) => {
 
+            const validator = new GetInteractorValidator();
             const presenter = new HttpPresenter(req, res);
-            const interactor = new GetUserInteractor({presenter, userService: this.userService});
+            const interactor = new GetUserInteractor({presenter, userService: this.userService, validator});
             
             try {
 
@@ -53,8 +58,9 @@ class UsersRouterBuilder {
 
         this.router.post('/search', async (req, res) => {
 
+            const validator = new SearchInteractorValidator();
             const presenter = new HttpPresenter(req, res);
-            const interactor = new SearchUsersInteractor({presenter, userService: this.userService});
+            const interactor = new SearchUsersInteractor({presenter, userService: this.userService, validator});
 
             try {
 
@@ -75,8 +81,9 @@ class UsersRouterBuilder {
         
         this.router.put('/:userID', async (req, res) => {
             
+            const validator = new UpdateInteractorValidator()
             const presenter = new HttpPresenter(req, res);
-            const interactor = new UpdateUserInteractor({presenter, userService: this.userService});
+            const interactor = new UpdateUserInteractor({presenter, userService: this.userService, validator});
 
             try {
 
@@ -93,7 +100,8 @@ class UsersRouterBuilder {
         this.router.delete('/:userID', async (req, res) => {
 
             const presenter = new HttpPresenter(req, res);
-            const interactor = new DeleteUserInteractor({presenter, userService: this.userService});
+            const validator = new DeleteInteractorValidator();
+            const interactor = new DeleteUserInteractor({presenter, userService: this.userService, validator});
             
             try {
 
