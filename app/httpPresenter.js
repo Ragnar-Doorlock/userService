@@ -17,7 +17,7 @@ class HttpPresenter {
 
     presentFailure (err) {
 
-        this.res.status(err.httpCode).send(err);
+        this.res.status(err.httpCode).send({message: err.message});
 
     }
 

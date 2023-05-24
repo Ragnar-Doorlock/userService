@@ -4,6 +4,8 @@ const DeleteUserInteractor = require('./users/delete-user/deleteUserInteractor')
 const {GetUserInteractor} = require('./users/get-users/getUserInteractor.js');
 const {SearchUsersInteractor} = require('./users/search-users/searchUserInteractor');
 const UpdateUserInteractor = require('./users/update-user/updateUserInteractor.js');
+const CreateUserValidator = require('../app/users/create-user/createInteractorValidator');
+
 
 class UsersRouterBuilder {
     constructor ({userService}, {express}) {
@@ -16,8 +18,9 @@ class UsersRouterBuilder {
 
         this.router.post('/', async (req, res) => {
 
+            const validator = new CreateUserValidator();
             const presenter = new HttpPresenter(req, res);
-            const interactor = new CreateUserInteractor({presenter, userService: this.userService});
+            const interactor = new CreateUserInteractor({presenter, userService: this.userService, validator});
 
             try {
 
