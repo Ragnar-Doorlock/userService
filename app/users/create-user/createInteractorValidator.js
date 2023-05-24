@@ -1,5 +1,5 @@
-const nameError = require('../../errors/nameErrors');
-const roleError = require('../../errors/roleErrors');
+const nameError = require('../../errors/error-texts/nameErrors');
+const roleError = require('../../errors/error-texts/roleErrors');
 
 class CreateUserValidator {
     
