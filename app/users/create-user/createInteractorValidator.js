@@ -1,5 +1,5 @@
-const nameError = require('../../errors/pipaErrorsDescription');
-const roleError = require('../../errors/pipaErrorsDescription');
+const nameError = require('../../errors/nameErrors');
+const roleError = require('../../errors/roleErrors');
 
 class CreateUserValidator {
     
@@ -13,15 +13,15 @@ class CreateUserValidator {
         }
 
         if (!name) {
-            errors.push('name is required'); //nameError.required - берет из idError, неправильно импорт делаю, наверное
+            errors.push(nameError.required);
         }
 
         if (!role) {
-            error.push(roleError.required);
+            errors.push(roleError.required);
         }
         
         if (!['admin', 'visitor'].includes(role)) {
-            error.push(roleError.invalid);
+            errors.push(roleError.invalid);
         }
 
         return errors;
